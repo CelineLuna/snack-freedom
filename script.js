@@ -83,10 +83,100 @@
     setTimeout(() => burst(W * 0.8, y, 50), 320);
   }
 
+  /* ---------- 1.5 满屏零食爆炸 ---------- */
+  const SNACK_FX = document.createElement("div");
+  SNACK_FX.id = "snackFx";
+  SNACK_FX.style.position = "fixed";
+  SNACK_FX.style.top = "0";
+  SNACK_FX.style.left = "0";
+  SNACK_FX.style.right = "0";
+  SNACK_FX.style.bottom = "0";
+  SNACK_FX.style.pointerEvents = "none";
+  SNACK_FX.style.overflow = "hidden";
+  SNACK_FX.style.zIndex = "60";
+  document.body.appendChild(SNACK_FX);
+
+  const EXPLODE_EMOJIS = [
+    "🍭", "🍫", "🍬", "🍩", "🧁", "🍪", "🍿", "🍦", "🍰", "🥨", "🍡", "🧋",
+    "🍮", "🍯", "🥮", "🍓", "🍉", "🍇", "🍔", "🍟", "🍕", "🌮", "🍪", "🍩",
+    "🥐", "🥞", "🍫", "🍬", "🧇", "🍔",
+  ];
+  let fxPieces = [];
+  let fxRaf = null;
+
+  function snackExplosion(ox, oy, count) {
+    const cx = ox == null ? W / 2 : ox;
+    const cy = oy == null ? H * 0.4 : oy;
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("span");
+      el.textContent = EXPLODE_EMOJIS[(Math.random() * EXPLODE_EMOJIS.length) | 0];
+      el.style.position = "absolute";
+      el.style.left = "0";
+      el.style.top = "0";
+      el.style.lineHeight = "1";
+      el.style.willChange = "transform, opacity";
+      el.style.pointerEvents = "none";
+      el.style.userSelect = "none";
+      el.style.fontSize = 20 + Math.random() * 30 + "px";
+      // 初始就放在爆心，避免闪到左上角
+      el.style.transform = "translate3d(" + cx + "px," + cy + "px,0) scale(0.5)";
+      SNACK_FX.appendChild(el);
+
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 5 + Math.random() * 17;
+      fxPieces.push({
+        el: el,
+        x: cx,
+        y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 4,
+        rot: Math.random() * 360,
+        vr: (Math.random() - 0.5) * 24,
+        scale: 0.55 + Math.random() * 0.9,
+        life: 1,
+        decay: 0.005 + Math.random() * 0.006,
+      });
+    }
+    if (!fxRaf) fxRaf = requestAnimationFrame(fxTick);
+  }
+
+  function fxTick() {
+    for (let i = fxPieces.length - 1; i >= 0; i--) {
+      const p = fxPieces[i];
+      p.vy += 0.42; // 重力
+      p.vx *= 0.985;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      p.life -= p.decay;
+      if (p.life <= 0 || p.y > H + 90) {
+        p.el.remove();
+        fxPieces.splice(i, 1);
+        continue;
+      }
+      const s = p.scale * (0.6 + p.life * 0.7);
+      p.el.style.opacity = Math.max(p.life, 0);
+      p.el.style.transform =
+        "translate3d(" + p.x + "px," + p.y + "px,0) rotate(" + p.rot + "deg) scale(" + s + ")";
+    }
+    if (fxPieces.length) {
+      fxRaf = requestAnimationFrame(fxTick);
+    } else {
+      fxRaf = null;
+    }
+  }
+
   /* ---------- 2. 主按钮 & 点击撒花 ---------- */
   document.getElementById("celebrate").addEventListener("click", (e) => {
     const r = e.currentTarget.getBoundingClientRect();
-    burst(r.left + r.width / 2, r.top + r.height / 2, 80);
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    // 满屏零食爆炸：主炸 + 二次补炸，铺满整个屏幕
+    snackExplosion(cx, cy, 110);
+    setTimeout(() => snackExplosion(cx, cy, 70), 140);
+    setTimeout(() => snackExplosion(W * 0.5, H * 0.45, 60), 300);
+    // 叠加彩带撒花
+    burst(cx, cy, 60);
     rainBurst();
   });
 
