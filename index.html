@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#ff7eb3" />
+  <meta name="description" content="祝小秋实现零食自由！一份专属于小秋的快乐认证书，点开领取今日份零食好运。" />
+  <title>祝小秋 · 零食自由 🍭</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍭</text></svg>" />
+</head>
+<body>
+  <!-- 飘浮零食背景 -->
+  <div class="floaters" aria-hidden="true">
+    <span>🍭</span><span>🍫</span><span>🍬</span><span>🍩</span><span>🧁</span>
+    <span>🍪</span><span>🍿</span><span>🍦</span><span>🍰</span><span>🥨</span>
+    <span>🍡</span><span>🧋</span>
+  </div>
+
+  <!-- 撒花画布 -->
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <!-- 主视觉 -->
+  <header class="hero">
+    <div class="badge">🎉 恭喜小秋 🎉</div>
+    <h1 class="hero-title">
+      祝小秋<br />
+      <span class="grad">零食自由</span>
+    </h1>
+    <p class="hero-sub">从今天起，货架随便挑，购物车随便填<br />这是属于你的、甜到冒泡的自由</p>
+    <button id="celebrate" class="cta">✨ 点击开启零食自由 ✨</button>
+    <p class="hero-hint">（点一下有惊喜哦）</p>
+  </header>
+
+  <!-- 认证书 -->
+  <section class="certificate reveal">
+    <div class="cert-inner">
+      <div class="cert-seal">🍭</div>
+      <h2>零食自由认证书</h2>
+      <p class="cert-line">兹证明</p>
+      <p class="cert-name">小秋 同学</p>
+      <p class="cert-body">
+        自即日起，正式实现<strong>「零食自由」</strong>。<br />
+        享有在任何时刻、任何地点，<br />
+        凭心意挑选零食的至高权利，<br />
+        不为价格犹豫，只为快乐买单。
+      </p>
+      <div class="cert-foot">
+        <span>发证单位：快乐星球零食局</span>
+        <span id="certDate">·</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 零食图鉴 -->
+  <section class="snacks reveal">
+    <h2 class="section-title">🍬 今日零食图鉴</h2>
+    <p class="section-sub">想吃哪个？点一下，它就是你的</p>
+    <div class="snack-grid" id="snackGrid"></div>
+  </section>
+
+  <!-- 随机快乐 -->
+  <section class="random reveal">
+    <h2 class="section-title">🎁 今日份快乐</h2>
+    <p class="section-sub">不知道吃啥？让命运帮你选</p>
+    <div class="random-box">
+      <div class="random-emoji" id="randomEmoji">🎲</div>
+      <div class="random-text" id="randomText">点下面的按钮试试手气</div>
+      <button id="rollBtn" class="cta cta-small">🎰 随机抽取</button>
+    </div>
+  </section>
+
+  <!-- 计数器 -->
+  <section class="counter reveal">
+    <div class="counter-card">
+      <div class="counter-num" id="counterNum">0</div>
+      <div class="counter-label">已领取的零食份数</div>
+      <button id="pickBtn" class="cta cta-small">🧺 再领一份</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Made with 🍭 for 小秋</p>
+    <p class="footer-sub">愿你的每一天，都有甜甜的小确幸</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

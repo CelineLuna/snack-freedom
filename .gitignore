@@ -1,0 +1,14 @@
+# 密钥 / 令牌，禁止提交
+*token*.txt
+*Token*.txt
+deepseek token.txt
+github token.txt
+*.key
+*.pem
+.env
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
